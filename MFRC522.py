@@ -411,7 +411,7 @@ while continue_reading:
     GPIO.output(7, False) 
 
     if(key_str == '222198158566'):
-        device.play_uri('x-sonosprog-http:station-song%3a1476647%2f20798790.mp4?sid=29&flags=32')
+        device.play_uri('http://archive.org/download/TenD2005-07-16.flac16/TenD2005-07-16t10Wonderboy_64kb.mp3')
         track = device.get_current_track_info()
         print track       
     else:

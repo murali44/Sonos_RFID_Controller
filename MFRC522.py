@@ -4,7 +4,7 @@ import signal
 import time
 import os
 import sys
-sys.path.insert(0, '/CodeBase/SoCo')
+sys.path.insert(0, '/CodeBase/Sonos_RFID_Controller/SoCo')
 from soco import SoCo
 from soco.core import SonosDiscovery
 

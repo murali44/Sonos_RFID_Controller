@@ -5,9 +5,10 @@ import time
 import os
 import sys
 sys.path.insert(0, '/CodeBase/Sonos_RFID_Controller/SoCo')
-from soco import SoCo
-from soco.core import SonosDiscovery
-
+import soco
+import subprocess
+sys.path.insert(0, '/CodeBase/Sonos_RFID_Controller/xmltodict')
+import json
   
 class MFRC522:
   NRSTPD = 22
@@ -374,6 +375,25 @@ class MFRC522:
     self.Write_MFRC522(self.TxAutoReg, 0x40)
     self.Write_MFRC522(self.ModeReg, 0x3D)
     self.AntennaOn()
+
+
+
+# Recursively follow redirects until there isn't a location header
+def resolve_http_redirect(url, depth=0):
+    if depth > 10:
+        raise Exception("Redirected "+depth+" times, giving up.")
+    o = urlparse.urlparse(url,allow_fragments=True)
+    conn = httplib.HTTPConnection(o.netloc)
+    path = o.path
+    if o.query:
+        path +='?'+o.query
+    conn.request("HEAD", path)
+    res = conn.getresponse()
+    headers = dict(res.getheaders())
+    if headers.has_key('location') and headers['location'] != url:
+        return resolve_http_redirect(headers['location'], depth+1)
+    else:
+        return url
   
 continue_reading = True
 # Capture SIGINT
@@ -387,34 +407,65 @@ signal.signal(signal.SIGINT, end_read)
   
 MIFAREReader = MFRC522()
 
-sonos_devices = SonosDiscovery()
 zone_name = 'Living Room'
-device = SoCo('192.168.2.2')
-master_ip = device.get_group_coordinator(zone_name)
-print "master ip for %s is %s" % (zone_name, master_ip)
-
+zones = list(soco.discover())
   
 while continue_reading:
   time.sleep(2)
   (status,TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
 
   if status == MIFAREReader.MI_OK:
-    print "Card detected"
+    print "Card found."
   
   (status,backData) = MIFAREReader.MFRC522_Anticoll()
   if status == MIFAREReader.MI_OK:
-    key_str = str(backData[0])+str(backData[1])+str(backData[2])+str(backData[3])+str(backData[4])
-    print "Card read UID: "+key_str
-    GPIO.output(7, False)
-    GPIO.output(7, True)
-    time.sleep(0.05)
-    GPIO.output(7, False) 
+	key_str = str(backData[0])+str(backData[1])+str(backData[2])+str(backData[3])+str(backData[4])
+    
+   	 # Beep
+    	GPIO.output(7, False)
+    	GPIO.output(7, True)
+    	time.sleep(0.05)
+    	GPIO.output(7, False) 
 
-    if(key_str == '222198158566'):
-        device.play_uri('http://archive.org/download/TenD2005-07-16.flac16/TenD2005-07-16t10Wonderboy_64kb.mp3')
-        track = device.get_current_track_info()
-        print track       
-    else:
-        print "didn't recognize id"
-  
+    	if(key_str == '222198158566'):
+		url = 'https://api.soundcloud.com/users/muralia/favorites.json?client_id=def2c5c7437c9ad46ffdca5518a5dcf0&limit=5'
+
+		proc = subprocess.Popen(["curl", url], stdout=subprocess.PIPE)
+		(out, err) = proc.communicate()
+		track_info = json.loads(out)
+
+		sc_tracks = []
+
+		for item in track_info:
+        		if item.get('kind') != 'track':
+                		continue
+        		if item.get("stream_url") is not None:
+                		stream_url = item.get("stream_url") + "?client_id=def2c5c7437c9ad46ffdca5518a5dcf0"
+                		proc = subprocess.Popen(["curl", "--head", stream_url], stdout=subprocess.PIPE)
+                		(out, err) = proc.communicate()
+                		for part in [s.strip().split(': ') for s in out.splitlines()]:
+                        		if (part[0] == 'Location'):
+                                		mp3url = part[1]
+                				sc_tracks.append(mp3url)
+
+
+		zone_name = 'Living Room'
+		zones = list(soco.discover())
+		living_room = soco.SoCo(zones[0].get_group_coordinator(zone_name))
+		living_room.clear_queue()
+
+		for track in sc_tracks:
+        		item = [
+        		('InstanceID', 0),
+        		('EnqueuedURI', track),
+        		('EnqueuedURIMetaData', ''),
+        		('DesiredFirstTrackNumberEnqueued', 0),
+        		('EnqueueAsNext', 1)
+        		]
+        		living_room.avTransport.AddURIToQueue(item)
+
+		
+		living_room.play_from_queue(0)								
+    	else:
+        	print "Card not recognized."
 

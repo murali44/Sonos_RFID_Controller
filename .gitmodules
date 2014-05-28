@@ -1,3 +1,6 @@
 [submodule "SoCo"]
 	path = SoCo
 	url = https://github.com/SoCo/SoCo
+[submodule "soundcloud-python"]
+	path = soundcloud-python
+	url = https://github.com/soundcloud/soundcloud-python.git

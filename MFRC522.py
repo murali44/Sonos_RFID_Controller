@@ -8,6 +8,7 @@ sys.path.insert(0, '/CodeBase/Sonos_RFID_Controller/SoCo')
 import soco
 import subprocess
 import json
+from random import shuffle
   
 class MFRC522:
   NRSTPD = 22
@@ -417,6 +418,7 @@ while continue_reading:
 		track_info = json.loads(out)
 
 		sc_tracks = []
+		shuffle(track_info)
 
 		for item in track_info:
         		if item.get('kind') != 'track':

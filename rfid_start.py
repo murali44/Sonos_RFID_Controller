@@ -1,3 +1,4 @@
+import RPi.GPIO as GPIO
 import signal
 import time
 import os
@@ -21,7 +22,7 @@ def end_read(signal,frame):
 
 signal.signal(signal.SIGINT, end_read)
 
-MIFAREReader = MFRC522.MFRC522()
+MIFAREReader = MFRC522()
 
 parser = SafeConfigParser()
 parser.read('config.ini')
@@ -62,15 +63,15 @@ while continue_reading:
             
             for item in track_info:
         		if item.get('kind') != 'track':
-                    continue
+	                    continue
         		if item.get("stream_url") is not None:
-                    stream_url = item.get("stream_url") + "?client_id=" + sc_client_id
-                    proc = subprocess.Popen(["curl", "--head", stream_url], stdout=subprocess.PIPE)
-                    (out, err) = proc.communicate()
-                    for part in [s.strip().split(': ') for s in out.splitlines()]:
-                        if (part[0] == 'Location'):
-                            mp3url = part[1]
-                            sc_tracks.append(mp3url)
+        	            	stream_url = item.get("stream_url") + "?client_id=" + sc_client_id
+				proc = subprocess.Popen(["curl", "--head", stream_url], stdout=subprocess.PIPE)
+                    		(out, err) = proc.communicate()
+                    		for part in [s.strip().split(': ') for s in out.splitlines()]:
+                        		if (part[0] == 'Location'):
+                            			mp3url = part[1]
+                            			sc_tracks.append(mp3url)
             
             
             zone_name = 'Living Room'

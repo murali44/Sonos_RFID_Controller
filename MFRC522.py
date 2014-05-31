@@ -419,9 +419,7 @@ while continue_reading:
     	GPIO.output(7, False) 
 
     	if(key_str == rfid_card1):
-		url = 'https://api.soundcloud.com/users/muralia/favorites.json?client_id='
-            + sc_client_id
-            + '&limit=5'
+		url = 'https://api.soundcloud.com/users/muralia/favorites.json?client_id=' + sc_client_id + '&limit=5'
 
 		proc = subprocess.Popen(["curl", url], stdout=subprocess.PIPE)
 		(out, err) = proc.communicate()

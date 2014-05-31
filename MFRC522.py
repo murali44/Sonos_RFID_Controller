@@ -394,8 +394,8 @@ MIFAREReader = MFRC522()
 parser = SafeConfigParser()
 parser.read('config.ini')
 
-print parser.get('rfid', 'whitecard')
-print parser.get('soundcloud', 'client_id')
+rfid_card1 = parser.get('rfid', 'whitecard')
+sc_client_id = parser.get('soundcloud', 'client_id')
 
 
 zone_name = 'Living Room'
@@ -418,8 +418,10 @@ while continue_reading:
     	time.sleep(0.05)
     	GPIO.output(7, False) 
 
-    	if(key_str == '222198158566'):
-		url = 'https://api.soundcloud.com/users/muralia/favorites.json?client_id=def2c5c7437c9ad46ffdca5518a5dcf0&limit=5'
+    	if(key_str == rfid_card1):
+		url = 'https://api.soundcloud.com/users/muralia/favorites.json?client_id='
+            + sc_client_id
+            + '&limit=5'
 
 		proc = subprocess.Popen(["curl", url], stdout=subprocess.PIPE)
 		(out, err) = proc.communicate()
@@ -432,7 +434,7 @@ while continue_reading:
         		if item.get('kind') != 'track':
                 		continue
         		if item.get("stream_url") is not None:
-                		stream_url = item.get("stream_url") + "?client_id=def2c5c7437c9ad46ffdca5518a5dcf0"
+                		stream_url = item.get("stream_url") + "?client_id=" + sc_client_id
                 		proc = subprocess.Popen(["curl", "--head", stream_url], stdout=subprocess.PIPE)
                 		(out, err) = proc.communicate()
                 		for part in [s.strip().split(': ') for s in out.splitlines()]:

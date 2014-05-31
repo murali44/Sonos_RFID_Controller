@@ -9,6 +9,7 @@ import soco
 import subprocess
 import json
 from random import shuffle
+from ConfigParser import SafeConfigParser
   
 class MFRC522:
   NRSTPD = 22
@@ -389,6 +390,13 @@ def end_read(signal,frame):
 signal.signal(signal.SIGINT, end_read)
   
 MIFAREReader = MFRC522()
+
+parser = SafeConfigParser()
+parser.read('config.ini')
+
+print parser.get('rfid', 'whitecard')
+print parser.get('soundcloud', 'client_id')
+
 
 zone_name = 'Living Room'
 zones = list(soco.discover())

@@ -9,7 +9,7 @@ import subprocess
 import json
 from random import shuffle
 from ConfigParser import SafeConfigParser
-from MFRC522 import MFRC522
+import mfrc522.MFRC522 as mfrc522
 
 
 continue_reading = True
@@ -22,7 +22,7 @@ def end_read(signal,frame):
 
 signal.signal(signal.SIGINT, end_read)
 
-MIFAREReader = MFRC522()
+MIFAREReader = mfrc522.MFRC522()
 
 parser = SafeConfigParser()
 parser.read('config.ini')

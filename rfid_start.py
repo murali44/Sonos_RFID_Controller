@@ -28,11 +28,14 @@ parser = SafeConfigParser()
 parser.read('config.ini')
 
 rfid_card1 = parser.get('rfid', 'whitecard')
+npr_card = parser.get('rfid','npr')
 sc_client_id = parser.get('soundcloud', 'client_id')
-
+sc_url = parser.get('soundcloud', 'url')
 
 zone_name = 'Living Room'
 zones = list(soco.discover())
+living_room = soco.SoCo(zones[0].get_group_coordinator(zone_name))
+living_room.clear_queue()
 
 while continue_reading:
     time.sleep(2)
@@ -51,8 +54,19 @@ while continue_reading:
     	time.sleep(0.05)
     	GPIO.output(7, False)
         
-    	if(key_str == rfid_card1):
-            url = 'https://api.soundcloud.com/users/muralia/favorites.json?client_id=' + sc_client_id + '&limit=5'
+	if(key_str == npr_card):
+	    	# track = 'nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3'
+	    	living_room.play_uri('nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3')
+	    	'''item = [
+                        ('InstanceID', 0),
+                        ('EnqueuedURI', track),
+                        ('EnqueuedURIMetaData', ''),
+                        ('DesiredFirstTrackNumberEnqueued', 0),
+                        ('EnqueueAsNext', 1)
+                        ]
+                living_room.avTransport.AddURIToQueue(item)'''
+    	elif(key_str == rfid_card1):
+            url = sc_url + sc_client_id + '&limit=5'
             
             proc = subprocess.Popen(["curl", url], stdout=subprocess.PIPE)
             (out, err) = proc.communicate()
@@ -73,11 +87,6 @@ while continue_reading:
                             			mp3url = part[1]
                             			sc_tracks.append(mp3url)
             
-            
-            zone_name = 'Living Room'
-            zones = list(soco.discover())
-            living_room = soco.SoCo(zones[0].get_group_coordinator(zone_name))
-            living_room.clear_queue()
             
             for track in sc_tracks:
         		item = [

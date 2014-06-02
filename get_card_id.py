@@ -3,8 +3,7 @@ import signal
 import time
 import sys
 import subprocess
-from MFRC522 import MFRC522
-
+import mfrc522.MFRC522 as mfrc522
 
 continue_reading = True
 # Capture SIGINT
@@ -16,7 +15,7 @@ def end_read(signal,frame):
 
 signal.signal(signal.SIGINT, end_read)
 
-MIFAREReader = MFRC522()
+MIFAREReader = mfrc522.MFRC522()
 
 while continue_reading:
     time.sleep(1)

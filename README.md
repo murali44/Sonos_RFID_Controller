@@ -32,10 +32,10 @@ First, we need to enable the peripheral.
     Reboot the Pi.
       Command: sudo reboot
 
-    At the prompt type:
-      lsmod
+    Check peripheral.
+      Command: lsmod
 
-    You should see spi_bcm2708 in the list. So far so good.
+    You should see 'spi_bcm2708' in the list.
 
     Update your Raspberry Pi.
       Command: sudo apt-get update

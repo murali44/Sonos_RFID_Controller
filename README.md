@@ -11,24 +11,25 @@ a radio station or playlist associated with the card.
 Raspberry Pi Setup
 ==================
 
-I'm using raspbian on my raspbian pi.
+I'm using raspbian on my raspberry pi.
 You'll find instructions here. http://bit.ly/1jKKAHr
 
 Hardware Setup
 ==============
 
 I used a RC522 RFID sensor with my Raspberry Pi.
-You can find one for $6 of cheaper on ebay. http://bit.ly/1mUNOgl
+You can find one for $6 or cheaper on ebay. http://bit.ly/1mUNOgl
 
 
-First it is necessary to enable the peripheral.
+First, we need to enable the peripheral.
 
     Edit the following file:
        /etc/modprobe.d/raspi-blacklsit.conf
 
-    Add '#' in front of the line spi-bcm2708. Save the file.
+    Comment the line 'spi-bcm2708' by adding a '#' in front of it. 
+    Save the file.
 
-    Next reboot the Pi.
+    Reboot the Pi.
       Command: sudo reboot
 
     At the prompt type:
@@ -36,13 +37,10 @@ First it is necessary to enable the peripheral.
 
     You should see spi_bcm2708 in the list. So far so good.
 
-    Next we have to update the Raspberry Pi in order to be able to
-    find the files in the following steps.
+    Update your Raspberry Pi.
       Command: sudo apt-get update
 
-    With that now complete, install python-dev with:
-       sudo apt-get install python-dev
 
- Next, connect your Raspberry Pi to the RC522 FRID sensor.
+ Next, connect your Raspberry Pi to the RC522 RFID sensor.
 
  ![ScreenShot](http://3.bp.blogspot.com/-93KdBuWD1g8/UdEamKhesBI/AAAAAAAADdg/AtIY45vsAgs/s715/Diagrama_Conexion.jpeg)

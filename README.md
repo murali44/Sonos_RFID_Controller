@@ -23,23 +23,25 @@ You can find one for $6 of cheaper on ebay. http://bit.ly/1mUNOgl
 
 First it is necessary to enable the peripheral.
 
-    Edit the following file:
-       /etc/modprobe.d/raspi-blacklsit.conf
+Edit the following file:
+    /etc/modprobe.d/raspi-blacklsit.conf
 
-    Add '#' in front of the line spi-bcm2708. Save the file.
+Add '#' in front of the line 'spi-bcm2708' and save the file.
 
-    Next reboot with: sudo reboot
+Next reboot the Pi.
+    sudo reboot
 
-    At the prompt type: lsmod
+At the prompt type:
+    lsmod
 
-    You should see spi_bcm2708 in the list. So far so good.
+You should see spi_bcm2708 in the list. So far so good.
 
-    Next we have to update the Raspberry Pi in order to be able to
-    find the files in the following steps. Update using:
-       sudo apt-get update
+Next we have to update the Raspberry Pi in order to be able to
+find the files in the following steps. Update using:
+    sudo apt-get update
 
-    With that now complete, install python-dev with:
-       sudo apt-get install python-dev
+With that completed, install python-dev with:
+    sudo apt-get install python-dev
 
  Next, connect your Raspberry Pi to the RC522 FRID sensor.
 

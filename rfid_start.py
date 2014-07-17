@@ -57,12 +57,12 @@ while continue_reading:
         time.sleep(0.05)
         GPIO.output(7, False)
 
-    if(key_str == npr_card):
-        zone.play_uri('nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3')
-    elif(key_str == rfid_card1):
-        spk_state = sonos.get_current_transport_info()
-        playing_state = spk_state['current_transport_state']
-        if playing_state != 'PLAYING':
+        if(key_str == npr_card):
+            zone.play_uri('nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3')
+        elif(key_str == rfid_card1):
+            #spk_state = sonos.get_current_transport_info()
+            #playing_state = spk_state['current_transport_state']
+            #if playing_state != 'PLAYING':
             sonos.clear_queue()
             client = soundcloud.Client(client_id=sc_client_id)
             tracks = client.get('/users/1343418/favorites', limit=5)
@@ -82,13 +82,13 @@ while continue_reading:
                         ('EnqueueAsNext', 1)]
                 sonos.avTransport.AddURIToQueue(item)
             sonos.play_from_queue(0)
-    else:
-        # Beep. Beep. Card not recognized.
-        GPIO.output(7, False)
-        GPIO.output(7, True)
-        time.sleep(0.02)
-        GPIO.output(7, False)
-        time.sleep(0.04)
-        GPIO.output(7, True)
-        time.sleep(0.02)
-        GPIO.output(7, False)
+        else:
+            # Beep. Beep. Card not recognized.
+            GPIO.output(7, False)
+            GPIO.output(7, True)
+            time.sleep(0.02)
+            GPIO.output(7, False)
+            time.sleep(0.04)
+            GPIO.output(7, True)
+            time.sleep(0.02)
+            GPIO.output(7, False)

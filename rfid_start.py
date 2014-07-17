@@ -40,7 +40,6 @@ sc_url = parser.get('soundcloud', 'url')
 zone_name = parser.get('zone', 'zonename')
 zones = list(soco.discover())
 zone = soco.SoCo(zones[0].get_group_coordinator(zone_name))
-zone.clear_queue()
 
 while continue_reading:
     time.sleep(2)

@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import RPi.GPIO as GPIO
 import signal
 import soco
@@ -7,6 +8,7 @@ import soundcloud
 import subprocess
 import sys
 import time
+import urllib2
 
 from random import shuffle
 from ConfigParser import SafeConfigParser
@@ -14,6 +16,7 @@ import mfrc522.MFRC522 as mfrc522
 
 
 continue_reading = True
+MEDIA_STREAM_URL = 'http://media.soundcloud.com/stream/'
 
 
 def end_read(signal, frame):
@@ -60,10 +63,7 @@ while continue_reading:
         if(key_str == npr_card):
             zone.play_uri('nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3')
         elif(key_str == rfid_card1):
-            #spk_state = sonos.get_current_transport_info()
-            #playing_state = spk_state['current_transport_state']
-            #if playing_state != 'PLAYING':
-            sonos.clear_queue()
+            zone.clear_queue()
             client = soundcloud.Client(client_id=sc_client_id)
             tracks = client.get('/users/1343418/favorites', limit=5)
             shuffle(tracks)
@@ -80,8 +80,8 @@ while continue_reading:
                         ('EnqueuedURIMetaData', ''),
                         ('DesiredFirstTrackNumberEnqueued', 0),
                         ('EnqueueAsNext', 1)]
-                sonos.avTransport.AddURIToQueue(item)
-            sonos.play_from_queue(0)
+                zone.avTransport.AddURIToQueue(item)
+            zone.play_from_queue(0)
         else:
             # Beep. Beep. Card not recognized.
             GPIO.output(7, False)

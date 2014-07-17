@@ -1,2 +1,4 @@
 requests
 RPi.GPIO
+soco
+soundcloud

@@ -3,7 +3,6 @@ import signal
 import time
 import os
 import sys
-sys.path.insert(0, '/CodeBase/Sonos_RFID_Controller/SoCo')
 import soco
 import subprocess
 import json
@@ -32,10 +31,10 @@ npr_card = parser.get('rfid','npr')
 sc_client_id = parser.get('soundcloud', 'client_id')
 sc_url = parser.get('soundcloud', 'url')
 
-zone_name = 'Living Room'
+zone_name = parser.get('zone','zonename')
 zones = list(soco.discover())
-living_room = soco.SoCo(zones[0].get_group_coordinator(zone_name))
-living_room.clear_queue()
+zone = soco.SoCo(zones[0].get_group_coordinator(zone_name))
+zone.clear_queue()
 
 while continue_reading:
     time.sleep(2)
@@ -56,7 +55,7 @@ while continue_reading:
         
 	if(key_str == npr_card):
 	    	# track = 'nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3'
-	    	living_room.play_uri('nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3')
+	    	zone.play_uri('nprdmp.ic.llnwd.net/stream/nprdmp_live01_mp3')
 	    	'''item = [
                         ('InstanceID', 0),
                         ('EnqueuedURI', track),
@@ -64,7 +63,7 @@ while continue_reading:
                         ('DesiredFirstTrackNumberEnqueued', 0),
                         ('EnqueueAsNext', 1)
                         ]
-                living_room.avTransport.AddURIToQueue(item)'''
+                zone.avTransport.AddURIToQueue(item)'''
     	elif(key_str == rfid_card1):
             url = sc_url + sc_client_id + '&limit=5'
             
@@ -96,9 +95,9 @@ while continue_reading:
                         ('DesiredFirstTrackNumberEnqueued', 0),
                         ('EnqueueAsNext', 1)
                         ]
-        		living_room.avTransport.AddURIToQueue(item)
+        		zone.avTransport.AddURIToQueue(item)
             
             
-            living_room.play_from_queue(0)								
+            zone.play_from_queue(0)								
     	else:
         	print "Card not recognized."

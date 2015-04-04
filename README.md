@@ -28,6 +28,15 @@ First, we need to enable the peripheral.
 
     Comment the line 'spi-bcm2708' by adding a '#' in front of it. 
     Save the file.
+    
+    You will also need to add “dtparam=spi=on” to your config.txt and reboot.
+
+    Edit the following file:
+        /boot/config.txt
+
+    add…  
+    dtparam=spi=on
+    …at the end of the file.
 
     Reboot the Pi.
       Command: sudo reboot

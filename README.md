@@ -19,7 +19,9 @@ Install Dependencies
 sudo apt-get install python-dev
 
 git clone https://github.com/lthiery/SPI-Py.git
+
 cd SPI-Py
+
 sudo python setup.py install
 
 

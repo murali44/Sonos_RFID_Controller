@@ -14,6 +14,15 @@ Raspberry Pi Setup
 I'm using raspbian on my raspberry pi.
 You'll find instructions here. http://bit.ly/1jKKAHr
 
+Install Dependencies
+====================
+sudo apt-get install python-dev
+
+git clone https://github.com/lthiery/SPI-Py.git
+cd SPI-Py
+sudo python setup.py install
+
+
 Hardware Setup
 ==============
 

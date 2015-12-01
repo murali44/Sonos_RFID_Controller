@@ -63,4 +63,4 @@ First, we need to enable the peripheral.
 
  Next, connect your Raspberry Pi to the RC522 RFID sensor.
 
- ![ScreenShot](http://1drv.ms/1HBQGvk)
+ ![ScreenShot](http://3.bp.blogspot.com/-93KdBuWD1g8/UdEamKhesBI/AAAAAAAADdg/AtIY45vsAgs/s715/Diagrama_Conexion.jpeg)
